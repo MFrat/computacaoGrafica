@@ -25,9 +25,9 @@ class MathPlot{
     }
 
     async draw2DCurve(callbackEquation){
-        for(let x = -700; x < this.MAX_LENGTH; x += .1){
+        for(let x = -this.canvas.width; x < this.MAX_LENGTH; x += .5){
             let y = await this.execEquation(callbackEquation, x);
-            await this.drawPoint(x, y);
+            this.drawPoint(x, y);
         }
     }
 
@@ -42,8 +42,8 @@ class MathPlot{
                     ctx.moveTo(0, this.GRID_SIZE*i);
                     ctx.lineTo(canvasWidth, this.GRID_SIZE*i);
                 }else{
-                    ctx.moveTo(this.GRID_SIZE*i, 0);
-                    ctx.lineTo(this.GRID_SIZE*i, canvasHeight);
+                    ctx.moveTo(this.GRID_SIZE*i+0.5, 0);
+                    ctx.lineTo(this.GRID_SIZE*i+0.5, canvasHeight);
                 }
             } else {
                 if(isX){
@@ -68,7 +68,21 @@ class MathPlot{
         this._drawAxis(this.canvasCtx, canvasWidth, canvasHeight, numLines, baseXposition, true);
         this._drawAxis(this.canvasCtx, canvasWidth, canvasHeight, numLines, baseXposition);
     }
+
+    clear(){
+        this.canvasCtx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width, this.canvas.height);
+        this._drawAxis();
+    }
 }
 
-mathPlot = new MathPlot();
-mathPlot.draw2DCurve(x => x**2/200);
+let mathPlot = new MathPlot();
+
+document.getElementById("btn").addEventListener('click', () => {
+    let equation = document.getElementById("textField").value;
+    eval(`mathPlot.draw2DCurve(x => ${equation});`);
+    // mathPlot.draw2DCurve(x => Math.sin(x*Math.PI/180)*300);
+});
+
+
+
+
