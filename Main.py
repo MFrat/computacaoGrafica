@@ -1,5 +1,6 @@
-from CustomGraphics import CustomGraphics
+from drawing.Figure import Zero
 
-graph = CustomGraphics('CG', 500, 500)
-graph.draw_line(0, 0, 100, 100)
-graph.wait()
+zero = Zero(position=(30, 30))
+zero.draw_axis()
+zero.draw()
+
