@@ -16,11 +16,12 @@ class CustomGraphics:
         point = Point(x, y)
         point.draw(self.win)
 
-    def draw_line(self, x_start: float, y_start: float, x_end: float, y_end: float) -> None:
+    def draw_line(self, color: str,  x_start: float, y_start: float, x_end: float, y_end: float) -> None:
         x_start, y_start = self._translate_points(x_start, y_start)
         x_end, y_end = self._translate_points(x_end, y_end)
 
         line = Line(Point(x_start, y_start), Point(x_end, y_end))
+        line.setFill(color)
         line.draw(self.win)
 
     def _define_origin(self) -> (int, int):
@@ -34,13 +35,13 @@ class CustomGraphics:
         upper_y = self._get_half_width()
         lower_y = -upper_y
 
-        self.draw_line(0, upper_y, 0, lower_y)
+        self.draw_line('gray', 0, upper_y, 0, lower_y)
 
     def _draw_x_axis(self) -> None:
         right_x = self._get_half_width()
         left_x = -right_x
 
-        self.draw_line(right_x, 0, left_x, 0)
+        self.draw_line('gray', right_x, 0, left_x, 0)
 
     def _translate_points(self, x: float, y: float) -> Tuple[float, float]:
         return x + self.x, -y + self.y
@@ -54,5 +55,3 @@ class CustomGraphics:
     def wait(self) -> None:
         self.win.getMouse()
         self.win.close()
-
-
