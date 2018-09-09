@@ -24,12 +24,13 @@ class CustomGraphics:
         line.setFill(color)
         line.draw(self.win)
 
-    def _define_origin(self) -> (int, int):
+    def _define_origin(self) -> Tuple[float, float]:
         return self._get_half_width(), self._get_half_height()
 
     def draw_axis(self) -> None:
         self._draw_y_axis()
         self._draw_x_axis()
+        # self._draw_z_axis()
 
     def _draw_y_axis(self) -> None:
         upper_y = self._get_half_width()
@@ -43,6 +44,12 @@ class CustomGraphics:
 
         self.draw_line('gray', right_x, 0, left_x, 0)
 
+    def _draw_z_axis(self) -> None:
+        right_x = self._get_half_width()
+        left_x = -right_x
+
+        self.draw_line('gray', 500, 500, -500, -500)
+
     def _translate_points(self, x: float, y: float) -> Tuple[float, float]:
         return x + self.x, -y + self.y
 
@@ -53,5 +60,4 @@ class CustomGraphics:
         return self.width/2
 
     def wait(self) -> None:
-        self.win.getMouse()
-        self.win.close()
+        self.win.wait_window()
