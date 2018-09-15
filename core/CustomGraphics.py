@@ -11,18 +11,36 @@ class CustomGraphics:
         self.win = GraphWin(title, width, height)
         self.x, self.y = self._define_origin()
 
+        self.obj = {}
+
     def draw_point(self, x: float, y: float) -> None:
         x, y = self._translate_points(x, y)
         point = Point(x, y)
         point.draw(self.win)
 
-    def draw_line(self, color: str,  x_start: float, y_start: float, x_end: float, y_end: float) -> None:
+    def draw_line(self, color: str, x_start: float, y_start: float, x_end: float, y_end: float,
+                  obj_id: str = None) -> None:
         x_start, y_start = self._translate_points(x_start, y_start)
         x_end, y_end = self._translate_points(x_end, y_end)
 
         line = Line(Point(x_start, y_start), Point(x_end, y_end))
         line.setFill(color)
         line.draw(self.win)
+
+        self._add_obj_part(obj_id, line)
+
+    def _add_obj_part(self, obj_id, part):
+        if obj_id is None:
+            return
+
+        if obj_id not in self.obj or self.obj[obj_id] is None:
+            self.obj[obj_id] = []
+
+        self.obj[obj_id].append(part)
+
+    def erase(self, obj_id):
+        for i in self.obj[obj_id]:
+            i.undraw()
 
     def _define_origin(self) -> Tuple[float, float]:
         return self._get_half_width(), self._get_half_height()
