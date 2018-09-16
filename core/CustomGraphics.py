@@ -8,7 +8,7 @@ class CustomGraphics:
     def __init__(self, title: str, width: float, height: float) -> None:
         self.width = width
         self.height = height
-        self.win = GraphWin(title, width, height)
+        self.win = GraphWin(title, width, height, autoflush=True)
         self.x, self.y = self._define_origin()
 
         self.obj = {}
@@ -29,6 +29,10 @@ class CustomGraphics:
 
         self._add_obj_part(obj_id, line)
 
+    def move(self, obj_id, x, y):
+        for i in self.obj[obj_id]:
+            i.move(x, y)
+
     def _add_obj_part(self, obj_id, part):
         if obj_id is None:
             return
@@ -41,6 +45,8 @@ class CustomGraphics:
     def erase(self, obj_id):
         for i in self.obj[obj_id]:
             i.undraw()
+
+        self.win.update()
 
     def _define_origin(self) -> Tuple[float, float]:
         return self._get_half_width(), self._get_half_height()
