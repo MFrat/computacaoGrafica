@@ -49,12 +49,14 @@ class CustomGraphics:
         self.win.update()
 
     def _define_origin(self) -> Tuple[float, float]:
+        # return 0, self.height
         return self._get_half_width(), self._get_half_height()
 
     def draw_axis(self) -> None:
         self._draw_y_axis()
         self._draw_x_axis()
         # self._draw_z_axis()
+        pass
 
     def _draw_y_axis(self) -> None:
         upper_y = self._get_half_width()

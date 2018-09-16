@@ -14,6 +14,9 @@ class Matrix:
     def __getitem__(self, item):
         return self.matrix[item]
 
+    def get_matrix(self):
+        return self.matrix
+
     def _init_matrix(self, len1, len2):
         return [[0 for _ in range(len1)] for _ in range(len2)]
 
@@ -26,9 +29,10 @@ class Matrix:
         return result
 
     def __str__(self):
-        return '\n'.join([''.join(['{:10}'.format(item) for item in row]) for row in self.matrix])
+        return '\n'.join([''.join(['{:30}'.format(item) for item in row]) for row in self.matrix])
 
 
-mat1 = Matrix([[12, 7, 3], [4, 5, 6], [7, 8, 9]])
-mat2 = Matrix([[5, 8, 1, 2], [6, 7, 3, 0], [4, 5, 9, 1]])
-print(Matrix(mat1 * mat2))
+# mat1 = Matrix([[12, 7], [4, 5]])
+# mat2 = Matrix([[5, 8]])
+# # print(mat1)
+# print(Matrix(mat2 * mat1))

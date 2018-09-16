@@ -1,6 +1,8 @@
 from typing import Tuple, List
 
 from core.CustomGraphics import CustomGraphics
+from core.motion.matrix import Matrix
+from core.motion.rotation import sin, cos
 
 Point = Tuple[float, float]
 
@@ -19,9 +21,11 @@ class Figure:
 
         self._path = None
 
-    def draw(self) -> None:
-        for i in range(len(self.path) - 1):
-            self._draw_line(self.path[i], self.path[i + 1])
+    def draw(self, custom_path=None) -> None:
+        p = custom_path if custom_path is not None else self.path
+
+        for i in range(len(p) - 1):
+            self._draw_line(p[i], p[i + 1])
 
     def erase(self):
         self.graph.erase(self.name)
@@ -35,6 +39,15 @@ class Figure:
 
     def _draw_line(self, point_start: Tuple[float, float], point_end: Tuple[float, float]) -> None:
         self.graph.draw_line('green', *point_start, *point_end, obj_id=self.name)
+
+    def rotate(self, angle):
+        rotation_matrix = Matrix([
+            [cos(angle), -sin(angle)],
+            [sin(angle), cos(angle)]
+        ])
+
+        self.erase()
+        self.draw(custom_path=Matrix(Matrix(self.path)*rotation_matrix).get_matrix())
 
     @property
     def path(self):
@@ -86,6 +99,10 @@ class Zero:
     def update_position(self, new_pos):
         self.parts[0].update_position(new_pos)
         self.parts[1].update_position((new_pos[0]+10, new_pos[1]-10))
+
+    def rotate(self, angle):
+        for i in self.parts:
+            i.rotate(angle)
 
     def erase(self) -> None:
         for i in self.parts:
