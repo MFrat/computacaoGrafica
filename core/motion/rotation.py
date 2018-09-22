@@ -11,15 +11,15 @@ def sin(angle):
     return math.sin(math.radians(angle))
 
 
-# angle = 45
-# rotation_matrix = Matrix([
-#     [cos(angle), -sin(angle)],
-#     [sin(angle), cos(angle)]
-# ])
-# l2 = Matrix([
-#     (200, 200),
-#     (300, 200),
-#     (300, 100),
-#     (200, 100)
-# ])
-# print(Matrix(l2*rotation_matrix))
+def rotation_matrix(angle):
+    return Matrix([
+        [cos(angle), -sin(angle)],
+        [sin(angle), cos(angle)]
+    ])
+
+
+def rotate(angle, path, center_x, center_y):
+    rot_matrix = rotation_matrix(angle)
+
+    path2 = [(i[0] - center_x, i[1] + center_y) for i in path]
+    return [(i[0] + center_x, i[1] - center_y) for i in Matrix(Matrix(path2) * rot_matrix).get_matrix()]

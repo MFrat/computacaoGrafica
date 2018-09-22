@@ -1,25 +1,33 @@
 from typing import Tuple, List
 
 from core.CustomGraphics import CustomGraphics
-from core.motion.matrix import Matrix
-from core.motion.rotation import sin, cos
+from core.motion.rotation import rotate
 
 Point = Tuple[float, float]
 
 
 class Figure:
-    def __init__(self, graph: CustomGraphics, position, name: str = None) -> None:
+    def __init__(self, graph: CustomGraphics, position, edge_size, rotation_center=None, name: str = None) -> None:
         if graph is None:
             raise ValueError('Graph can not be None')
+
+        if rotation_center is not None and len(rotation_center) != 2:
+            raise ValueError('Rotation center must be a list or tuple with length 2')
+
         self.position = position
-
-        if self.path is None:
-            raise ValueError('Path can not be None')
-
+        self.edge_size = edge_size
         self.graph = graph
         self.name = name
 
+        if rotation_center is not None:
+            self._rotation_center_x = rotation_center[0]
+            self._rotation_center_y = rotation_center[1]
+        else:
+            self._rotation_center_x = None
+            self._rotation_center_y = None
+
         self._path = None
+        self._old_path = None
 
     def draw(self, custom_path=None) -> None:
         p = custom_path if custom_path is not None else self.path
@@ -41,13 +49,32 @@ class Figure:
         self.graph.draw_line('green', *point_start, *point_end, obj_id=self.name)
 
     def rotate(self, angle):
-        rotation_matrix = Matrix([
-            [cos(angle), -sin(angle)],
-            [sin(angle), cos(angle)]
-        ])
-
         self.erase()
-        self.draw(custom_path=Matrix(Matrix(self.path)*rotation_matrix).get_matrix())
+        self.draw(custom_path=rotate(angle, self.path, self.rotation_center_x, -self.rotation_center_y))
+
+    @property
+    def rotation_center_x(self):
+        if self._rotation_center_x is None:
+            self._rotation_center_x = self.x + self.edge_size / 2
+            return self._rotation_center_x
+
+        return self._rotation_center_x
+
+    @property
+    def rotation_center_y(self):
+        if self._rotation_center_y is None:
+            self._rotation_center_y = self.y - self.edge_size/2
+            return self._rotation_center_y
+
+        return self._rotation_center_y
+
+    @property
+    def x(self):
+        return self.position[0]
+
+    @property
+    def y(self):
+        return self.position[1]
 
     @property
     def path(self):
@@ -55,6 +82,9 @@ class Figure:
             return self._path
 
         self._path = self._get_vertexes()
+        if self._path is None:
+            raise ValueError('Path can not be None')
+
         return self._path
 
     def _get_vertexes(self) -> List[Point]:
@@ -64,10 +94,9 @@ class Figure:
 class _Zero(Figure):
     def __init__(self, graph: CustomGraphics, position: Tuple[float, float] = (0, 0),
                  edge_size: float = 100, name: str = None) -> None:
-        self.edge_size = edge_size
 
         self._path = None
-        super().__init__(graph, position, name)
+        super().__init__(graph=graph, position=position, edge_size=edge_size, name=name)
 
     def _get_vertexes(self) -> List[Point]:
         x, y = self.position
@@ -88,7 +117,7 @@ class Zero:
         self.parts = [
             _Zero(position=position, graph=graph, edge_size=edge_size,
                   name='{0}1'.format(name if name is not None else 'Zero')),
-            _Zero(position=(position[0]+10, position[0]-10), graph=graph,
+            _Zero(position=(position[0]+10, position[1]-10), graph=graph,
                   edge_size=edge_size-20, name='{0}2'.format(name if name is not None else 'Zero'))
         ]
 

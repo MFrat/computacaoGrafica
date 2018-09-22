@@ -33,6 +33,10 @@ class CustomGraphics:
         for i in self.obj[obj_id]:
             i.move(x, y)
 
+    def move_exact(self, obj_id, pos_list):
+        for n, i in enumerate(self.obj[obj_id]):
+            i.move(*pos_list[n])
+
     def _add_obj_part(self, obj_id, part):
         if obj_id is None:
             return
@@ -49,12 +53,12 @@ class CustomGraphics:
         self.win.update()
 
     def _define_origin(self) -> Tuple[float, float]:
-        # return 0, self.height
-        return self._get_half_width(), self._get_half_height()
+        return 0, self.height
+        # return self._get_half_width(), self._get_half_height()
 
     def draw_axis(self) -> None:
-        self._draw_y_axis()
-        self._draw_x_axis()
+        # self._draw_y_axis()
+        # self._draw_x_axis()
         # self._draw_z_axis()
         pass
 
