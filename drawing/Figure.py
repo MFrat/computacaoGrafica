@@ -29,9 +29,9 @@ class Figure:
         self._path = None
         self._old_path = None
 
-    def draw(self, custom_path=None) -> None:
+    def draw(self, custom_path=None, homogeneous=True) -> None:
         p = custom_path if custom_path is not None else self.path
-
+        p = [i[:-1] for i in p if len(i) == 3] if homogeneous else p # Removendo coordenada homogenea
         for i in range(len(p) - 1):
             self._draw_line(p[i], p[i + 1])
 
@@ -100,10 +100,10 @@ class _Zero(Figure):
 
     def _get_vertexes(self) -> List[Point]:
         x, y = self.position
-        right_top = (x, y)
-        left_top = (x + self.edge_size, y)
-        right_bot = (x, y - self.edge_size)
-        left_bot = (x + self.edge_size, y - self.edge_size)
+        right_top = (x, y, 1)
+        left_top = (x + self.edge_size, y, 1)
+        right_bot = (x, y - self.edge_size, 1)
+        left_bot = (x + self.edge_size, y - self.edge_size, 1)
 
         l = [right_top, left_top, left_bot, right_bot]
 

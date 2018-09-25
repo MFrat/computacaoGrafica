@@ -7,12 +7,14 @@ from drawing.Figure import Zero
 graph = CustomGraphics('CG', 500, 500)
 graph.draw_axis()
 
-zero = Zero(position=(300, 300), graph=graph, edge_size=100, name='Zero1')
+zero = Zero(position=(50, 50), graph=graph, edge_size=100, name='Zero1')
 zero.draw()
 zero2 = Zero(position=(100, 150), graph=graph, edge_size=200, name='Zero2')
 zero2.draw()
 # zero2 = Zero(position=(-100, -100), graph=graph, edge_size=130, name='Zero2')
 # zero2.draw()
+
+time.sleep(1)
 
 
 def rotate(figures):
@@ -23,6 +25,10 @@ def rotate(figures):
 
         if j is not None:
             figures[1].rotate(j)
+
+
+# for i in range(10000):
+#     zero.rotate(i)
 
 
 rotate([zero2, zero])
