@@ -2,6 +2,7 @@ from typing import Tuple, List
 
 from core.CustomGraphics import CustomGraphics
 from core.motion.rotation import rotate
+from core.motion.translation import translation
 
 Point = Tuple[float, float]
 
@@ -47,6 +48,11 @@ class Figure:
 
     def _draw_line(self, point_start: Tuple[float, float], point_end: Tuple[float, float]) -> None:
         self.graph.draw_line('green', *point_start, *point_end, obj_id=self.name)
+
+    def translate(self, delta):
+        # TODO, ao inves de passar o delte, passar a posição final.
+        self.erase()
+        self.draw(custom_path=translation(x_delta=delta, y_delta=delta, path=self.path))
 
     def rotate(self, angle):
         self.erase()
@@ -132,6 +138,10 @@ class Zero:
     def rotate(self, angle):
         for i in self.parts:
             i.rotate(angle)
+
+    def translate(self, delta):
+        for i in self.parts:
+            i.translate(delta)
 
     def erase(self) -> None:
         for i in self.parts:

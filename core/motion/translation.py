@@ -9,8 +9,7 @@ def _translation_matrix(x_delta=0, y_delta=0):
         [0, 0, 1]
     ])
 
-def translation(pos_start, pos_end, path):
-    aaaa = [transpose_matrix([i]) for i in path]
-    print(aaaa)
-    path4 = [transpose_matrix(_translation_matrix() * Matrix(i))[0] for i in aaaa]
-    print(path4)
+def translation(x_delta, y_delta, path):
+    matrix = _translation_matrix(x_delta, y_delta)
+    transposed_matrix = [transpose_matrix([i]) for i in path]
+    return [transpose_matrix(matrix * Matrix(i))[0] for i in transposed_matrix]
