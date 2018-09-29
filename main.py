@@ -21,10 +21,10 @@ def rotate(figures):
     for i, j in list(itertools.zip_longest(range(361), range(91))):
         time.sleep(.01)
         if i is not None:
-            figures[0].translate(i)
+            figures[0].rotate(i)
 
         if j is not None:
-            figures[1].rotate(j)
+            figures[1].translate(j)
 
 
 # for i in range(10000):
