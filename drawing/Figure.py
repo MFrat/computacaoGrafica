@@ -54,9 +54,9 @@ class Figure:
         self.erase()
         self.draw(custom_path=translation(x_delta=delta, y_delta=delta, path=self.path))
 
-    def rotate(self, angle):
+    def rotate(self, angle, delta=0):
         self.erase()
-        self.draw(custom_path=rotate(angle, self.path, self.rotation_center_x, -self.rotation_center_y))
+        self.draw(custom_path=rotate(angle, self.path, self.rotation_center_x, -self.rotation_center_y, delta))
 
     @property
     def rotation_center_x(self):
@@ -123,8 +123,8 @@ class Zero:
         self.parts = [
             _Zero(position=position, graph=graph, edge_size=edge_size,
                   name='{0}1'.format(name if name is not None else 'Zero')),
-            _Zero(position=(position[0]+10, position[1]-10), graph=graph,
-                  edge_size=edge_size-20, name='{0}2'.format(name if name is not None else 'Zero'))
+            _Zero(position=(position[0]+5, position[1]-5), graph=graph,
+                  edge_size=edge_size-10, name='{0}2'.format(name if name is not None else 'Zero'))
         ]
 
     def draw(self) -> None:
@@ -135,9 +135,9 @@ class Zero:
         self.parts[0].update_position(new_pos)
         self.parts[1].update_position((new_pos[0]+10, new_pos[1]-10))
 
-    def rotate(self, angle):
+    def rotate(self, angle, delta):
         for i in self.parts:
-            i.rotate(angle)
+            i.rotate(angle, delta)
 
     def translate(self, delta):
         for i in self.parts:
