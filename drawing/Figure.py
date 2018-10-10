@@ -106,12 +106,17 @@ class _Zero(Figure):
 
     def _get_vertexes(self) -> List[Point]:
         x, y = self.position
-        right_top = (x, y, 1)
-        left_top = (x + self.edge_size, y, 1)
+        right_top = (x, 0.9*y, 1)
+        right_top_2 = (1.1*x, y, 1)
+        right_bot_2 = (1.1*x, 0.9*y - self.edge_size, 1)
         right_bot = (x, y - self.edge_size, 1)
         left_bot = (x + self.edge_size, y - self.edge_size, 1)
+        left_bot_2 = (0.9*x + self.edge_size, 0.9*y - self.edge_size, 1)
+        left_top_2 = (0.9*x + self.edge_size, y, 1)
+        left_top = (x + self.edge_size, 0.9*y, 1)
+        
 
-        l = [right_top, left_top, left_bot, right_bot]
+        l = [right_top_2, right_top, right_bot, right_bot_2, left_bot_2, left_bot, left_top, left_top_2]
 
         return l + [l[0]]
 
