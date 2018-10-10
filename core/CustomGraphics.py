@@ -81,7 +81,7 @@ class CustomGraphics:
         self.draw_line('gray', 500, 500, -500, -500)
 
     def _translate_points(self, x: float, y: float) -> Tuple[float, float]:
-        return x + self.x, -y + self.y
+        return (x*5 + self.x), (-y*5 + self.y)
 
     def _get_half_height(self) -> float:
         return self.height/2

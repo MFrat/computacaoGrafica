@@ -9,8 +9,8 @@ graph.draw_axis()
 
 zero = Zero(position=(50, 50), graph=graph, edge_size=50, name='Zero1')
 zero.draw()
-zero2 = Zero(position=(100, 100), graph=graph, edge_size=100, name='Zero2')
-zero2.draw()
+# zero2 = Zero(position=(100, 100), graph=graph, edge_size=100, name='Zero2')
+# zero2.draw()
 # zero2 = Zero(position=(-100, -100), graph=graph, edge_size=130, name='Zero2')
 # zero2.draw()
 
@@ -25,7 +25,7 @@ def rotate(figures):
         angle = angle if angle is not None else 90
         pos = pos if pos is not None else 50
         figures[0].rotate(angle, pos)
-        figures[1].rotate(angle, pos)
+        # figures[1].rotate(angle, pos)
         # if j is not None:
         #     figures[1].translate(j)
 
@@ -34,5 +34,5 @@ def rotate(figures):
 #     zero.rotate(i)
 
 
-rotate([zero, zero2])
+rotate([zero])
 graph.wait()
