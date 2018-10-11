@@ -8,7 +8,7 @@ Point = Tuple[float, float]
 
 
 class Figure:
-    def __init__(self, graph: CustomGraphics, position, edge_size, rotation_center=None, name: str = None) -> None:
+    def __init__(self, graph: CustomGraphics, position, width, height, rotation_center=None, name: str = None) -> None:
         if graph is None:
             raise ValueError('Graph can not be None')
 
@@ -16,7 +16,8 @@ class Figure:
             raise ValueError('Rotation center must be a list or tuple with length 2')
 
         self.position = position
-        self.edge_size = edge_size
+        self.width = width
+        self.height = height
         self.graph = graph
         self.name = name
 
@@ -58,10 +59,13 @@ class Figure:
         self.erase()
         self.draw(custom_path=rotate(angle, self.path, self.rotation_center_x, -self.rotation_center_y, delta))
 
+    def get_rotation_center(self):
+        return self.rotation_center_x, self.rotation_center_y
+
     @property
     def rotation_center_x(self):
         if self._rotation_center_x is None:
-            self._rotation_center_x = self.x + self.edge_size / 2
+            self._rotation_center_x = self.x + self.width/2
             return self._rotation_center_x
 
         return self._rotation_center_x
@@ -69,7 +73,7 @@ class Figure:
     @property
     def rotation_center_y(self):
         if self._rotation_center_y is None:
-            self._rotation_center_y = self.y - self.edge_size/2
+            self._rotation_center_y = self.y - self.height/2
             return self._rotation_center_y
 
         return self._rotation_center_y
@@ -98,20 +102,40 @@ class Figure:
 
 
 class _Zero(Figure):
-    def __init__(self, graph: CustomGraphics, position: Tuple[float, float] = (0, 0),
-                 edge_size: float = 100, name: str = None) -> None:
+    def __init__(self, height, width, graph: CustomGraphics, position = (0, 0), name = None, rotation_center=None) -> None:
 
         self._path = None
-        super().__init__(graph=graph, position=position, edge_size=edge_size, name=name)
+        super().__init__(graph=graph, position=position, width=width, height=height, name=name, rotation_center=rotation_center)
 
     def _get_vertexes(self) -> List[Point]:
         x, y = self.position
         right_top = (x, y, 1)
-        left_top = (x + self.edge_size, y, 1)
-        right_bot = (x, y - self.edge_size, 1)
-        left_bot = (x + self.edge_size, y - self.edge_size, 1)
+        left_top = (x + self.width, y, 1)
+        right_bot = (x, y - self.height, 1)
+        left_bot = (x + self.width, y - self.height, 1)
 
         l = [right_top, left_top, left_bot, right_bot]
+
+        return l + [l[0]]
+
+class _Zero2(Figure):
+    def __init__(self, width, height, graph: CustomGraphics, position: Tuple[float, float] = (0, 0), name: str = None) -> None:
+
+        self._path = None
+        super().__init__(graph=graph, position=position, width=width, height=height, name=name)
+
+    def _get_vertexes(self) -> List[Point]:
+        x, y = self.position
+        a = (x, y, 1)
+        b = (a[0]+self.width, a[1], 1)
+        c = (b[0]+self.width/2, b[1]-self.width/2, 1)
+        d = (c[0], c[1]-self.height, 1)
+        e = (d[0]-self.width/2, d[1]-self.width/2, 1)
+        f = (e[0]-self.width, e[1], 1)
+        g = (f[0]-self.width/2, f[1]+self.width/2, 1)
+        h = (g[0], g[1]+self.height, 1)
+
+        l = [a, b, c, d, e, f, g, h]
 
         return l + [l[0]]
 
@@ -120,11 +144,11 @@ class Zero:
     def __init__(self, graph: CustomGraphics, position: Tuple[float, float] = (0, 0),
                  edge_size: float = 100, name: str = None) -> None:
         self.position = position
+        zero2 = _Zero2(position=position, graph=graph, width=10, height=20, name='{0}1'.format(name if name is not None else 'Zero'))
+        zero = _Zero(position=(position[0], position[1]-5), graph=graph, height=20, width=10, 
+                     name='{0}2'.format(name if name is not None else 'Zero'), rotation_center=zero2.get_rotation_center())
         self.parts = [
-            _Zero(position=position, graph=graph, edge_size=edge_size,
-                  name='{0}1'.format(name if name is not None else 'Zero')),
-            _Zero(position=(position[0]+5, position[1]-5), graph=graph,
-                  edge_size=edge_size-10, name='{0}2'.format(name if name is not None else 'Zero'))
+            zero2, zero
         ]
 
     def draw(self) -> None:
