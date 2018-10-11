@@ -114,7 +114,7 @@ class _Zero(Figure):
         right_bot = (x, y - self.height, 1)
         left_bot = (x + self.width, y - self.height, 1)
 
-        l = [right_top, left_top, left_bot, right_bot]
+        l = [right_top_2, right_top, right_bot, right_bot_2, left_bot_2, left_bot, left_top, left_top_2]
 
         return l + [l[0]]
 
