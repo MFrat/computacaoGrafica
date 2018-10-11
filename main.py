@@ -14,7 +14,7 @@ zero.draw()
 # zero2 = Zero(position=(-100, -100), graph=graph, edge_size=130, name='Zero2')
 # zero2.draw()
 
-#time.sleep(1)
+time.sleep(1)
 
 
 def rotate(figures):
