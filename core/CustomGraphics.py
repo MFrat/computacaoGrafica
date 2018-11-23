@@ -46,6 +46,9 @@ class CustomGraphics:
 
         self.obj[obj_id].append(part)
 
+    def erase_index(self, obj_id, index):
+        self.obj[obj_id][index].undraw()
+
     def erase(self, obj_id):
         for i in self.obj[obj_id]:
             i.undraw()

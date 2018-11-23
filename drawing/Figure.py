@@ -37,6 +37,9 @@ class Figure:
         for i in range(len(p) - 1):
             self._draw_line(p[i], p[i + 1])
 
+    def erase_index(self, index):
+        self.graph.erase_index(self.name, index)
+
     def erase(self):
         self.graph.erase(self.name)
 
@@ -118,6 +121,7 @@ class _Zero(Figure):
 
         return l + [l[0]]
 
+
 class _Zero2(Figure):
     def __init__(self, width, height, graph: CustomGraphics, position: Tuple[float, float] = (0, 0), name: str = None) -> None:
 
@@ -155,6 +159,9 @@ class Zero:
         for i in self.parts:
             i.draw()
 
+    def get_vertexes(self, index):
+        return self.parts[index]._get_vertexes()
+
     def update_position(self, new_pos):
         self.parts[0].update_position(new_pos)
         self.parts[1].update_position((new_pos[0]+10, new_pos[1]-10))
@@ -167,6 +174,58 @@ class Zero:
         for i in self.parts:
             i.translate(delta)
 
+    def erase_index(self, part, index):
+        self.parts[part].erase_index(index)
+
     def erase(self) -> None:
         for i in self.parts:
             i.erase()
+
+
+class Zero3D:
+    def __init__(self, graph):
+        self.graph = graph
+        self.zero1 = Zero(position=(50, 50), graph=graph, edge_size=10, name='Zero1')
+        self.zero2 = Zero(position=(48, 52), graph=graph, edge_size=10, name='Zero2')
+
+    def draw_wire(self):
+        self.zero1.draw()
+        self.zero2.draw()
+
+        zipped = zip(self.zero1.get_vertexes(0), self.zero2.get_vertexes(0))
+        for start, end in zipped:
+            self.graph.draw_line('gray', start[0], start[1], end[0], end[1])
+
+        zipped = zip(self.zero2.get_vertexes(1), self.zero1.get_vertexes(1))
+        for start, end in zipped:
+            self.graph.draw_line('gray', start[0], start[1], end[0], end[1])
+
+    def draw_boundary(self):
+        self.zero1.draw()
+        self.zero2.draw()
+
+        print(self.zero1.get_vertexes(0))
+        print(self.zero1.get_vertexes(1))
+        print(self.zero2.get_vertexes(0))
+        print(self.zero2.get_vertexes(1))
+
+        start = self.zero1.get_vertexes(0)
+        end = self.zero2.get_vertexes(0)
+        for index in [0, 7]:
+            self.graph.draw_line('gray', start[index][0], start[index][1], end[index][0], end[index][1])
+
+        start = self.zero1.get_vertexes(1)
+        end = self.zero2.get_vertexes(1)
+        for index in [5]:
+            self.graph.draw_line('gray', start[index][0], start[index][1], end[index][0], end[index][1])
+
+        self.zero2.erase_index(1, 1)
+        self.zero2.erase_index(1, 7)
+        self.zero2.erase_index(1, 6)
+
+        self.zero2.erase_index(0, 2)
+        self.zero2.erase_index(0, 3)
+        self.zero2.erase_index(0, 4)
+
+
+
