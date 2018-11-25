@@ -204,11 +204,6 @@ class Zero3D:
         self.zero1.draw()
         self.zero2.draw()
 
-        print(self.zero1.get_vertexes(0))
-        print(self.zero1.get_vertexes(1))
-        print(self.zero2.get_vertexes(0))
-        print(self.zero2.get_vertexes(1))
-
         start = self.zero1.get_vertexes(0)
         end = self.zero2.get_vertexes(0)
         for index in [0, 7]:
@@ -216,7 +211,7 @@ class Zero3D:
 
         start = self.zero1.get_vertexes(1)
         end = self.zero2.get_vertexes(1)
-        for index in [5]:
+        for index in [5, 6, 2]:
             self.graph.draw_line('gray', start[index][0], start[index][1], end[index][0], end[index][1])
 
         self.zero2.erase_index(1, 1)
